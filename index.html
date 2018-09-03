@@ -1,15 +1,123 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="da">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-    <link rel="stylesheet" href="">
+    <title>Babushka Menu</title>
+    <style>
+        .ret-display {
+            display: grid;
+            border: 1px solid(3);
+            padding: 10px;
+            grid-gap: 10px;
+        }
+
+        @media screen and (min-width: 1229px) {
+            .ret-display {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media screen and (min-width: 830px) {
+            .ret-display {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+        }
+
+        @media screen and (min-width: 425px) {
+            .ret-display {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+        }
+
+    </style>
 </head>
 
 <body>
-    <script src=""></script>
+    <header>
+        <h1>Menu</h1>
+        <nav>
+            <button class="forretter">Forretter</button>
+            <button class="hovedretter">Hovedretter</button>
+            <button class="desserter">Desserter</button>
+            <button class="drikkevarer">Drikkevarer</button>
+            <button></button>
+        </nav>
+    </header>
+
+    <main class="ret-display">
+
+    </main>
+
+    <footer>
+        <p> Projekt af Isabella Funck Bilsteen</p>
+    </footer>
+
+    <!--    //template tagget kan som sådan ikke ses men omfavner det hele-->
+    <template class="ret-template">
+     <article>
+         <h2 class="ret-navn"> </h2>
+         <img class="ret-billede" src="" alt="">
+         <p class="ret-kortbeskrivelse"> </p>
+         <p class="ret-pris"> </p>
+
+<!--
+          <p class="ret-langbeskrivelse"> </p>
+              <p class="ret-id"> </p>
+          <p class="ret-kategori"> </p>
+         <p class="ret-oprindelsesregion"> </p>
+-->
+
+     </article>
+    </template>
+
+    <script>
+        //OBS camillias tag
+        let retter = [];
+        document.addEventListener("DOMContentLoaded", start);
+
+        function start() {
+            hentJson();
+        }
+
+        async function hentJson() {
+            let jsonData = await fetch("menu.json");
+            retter = await jsonData.json();
+            visRetter();
+        }
+
+        function visRetter() {
+            let display = document.querySelector(".ret-display");
+            let temp = document.querySelector(".ret-template");
+            //løb personliste igennem og lav klon//
+
+            retter.forEach(ret => {
+
+                //lav en klon af template
+                let klon = temp.cloneNode(true).content;
+                //indsæt data i html
+                klon.querySelector("h2").textContent = ret.navn;
+                klon.querySelector(".ret-billede").src = "assets/imgs/small/" + ret.billede + "-sm.jpg"
+                ret.billede.jpg;
+
+                klon.querySelector(".ret-billede").alt = "billede af" + ret.navn;
+                klon.querySelector(".ret-kortbeskrivelse").textContent = ret.kortbeskrivelse;
+                klon.querySelector(".ret-pris").textContent = ret.pris;
+
+
+                //placer klon i html
+                display.appendChild(klon);
+            });
+        }
+
+    </script>
+
+
+
 </body>
 
 </html>
