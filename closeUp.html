@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Babushka Menu single view</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=ABeeZee|Anton|Quattrocento+Sans');
+
+        html {
+            background-color: darkorange;
+        }
+
+        header h1 {
+            font-family: 'ABeeZee', sans-serif;
+            text-align: center;
+            font-size: 50px;
+            font-weight: bolder;
+        }
+
+
+        h2 {
+            font-family: 'Anton', sans-serif;
+        }
+
+        p {
+            font-family: 'Quattrocento Sans', sans-serif;
+        }
+
+        span {
+            font-family: 'Quattrocento Sans', sans-serif;
+        }
+
+        img {
+            margin-top: 2vw;
+            height: 30vw;
+            width: auto;
+        }
+
+
+        .ret-display {
+            background-image: url(matroschka.png);
+        }
+
+
+        nav button {
+            height: 40px;
+            width: 150px;
+            background-color: #ffa53a;
+            border: none;
+            margin-right: 5px;
+
+
+            font-family: 'ABeeZee', sans-serif;
+            text-align: center;
+            font-size: 20px;
+        }
+
+
+
+        @media screen and (max-width: 805px) {
+            nav button {
+                height: 20px;
+                width: 75px;
+                font-size: 12px;
+                margin-right: -9px;
+
+            }
+        }
+
+        .ret-display {
+            display: grid;
+            border: 1px solid(3);
+            padding: 10px;
+            grid-gap: 10px;
+        }
+
+
+        @media screen and (min-width: 1229px) {
+            .ret-display {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media screen and (min-width: 830px) {
+            .ret-display {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+        }
+
+        @media screen and (min-width: 425px) {
+            .ret-display {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Restaurant Babushka</h1>
+        <h1>Menu</h1>
+        <nav>
+            <button class="menu-item" data-menu="forretter">Forretter</button>
+            <button class="menu-item" data-menu="hovedretter">Hovedretter</button>
+            <button class="menu-item" data-menu="desserter">Desserter</button>
+            <button class="menu-item" data-menu="drikkevarer">Drikkevarer</button>
+            <button class="menu-item" data-menu="sideorders">Sides</button>
+        </nav>
+    </header>
+
+    <section class="ret-display">
+        <article>
+            <h2 class="ret-navn"> </h2>
+            Stammer oprindeligt fra <span class="ret-oprindelsesregion"> </span> regionen.
+            <p class="ret-langbeskrivelse"> </p>
+            <span class="ret-pris"></span>DKK <br>
+            <img class="ret-billede" src="" alt="">
+
+
+            <!--
+          <p class="ret-langbeskrivelse"> </p>
+              <p class="ret-id"> </p>
+          <p class="ret-kategori"> </p>
+         <p class="ret-oprindelsesregion"> </p>
+-->
+
+        </article>
+    </section>
+
+
+
+    <footer>
+        <p> Projekt af Isabella Funck Bilsteen</p>
+    </footer>
+
+    <!--    //template tagget kan som sådan ikke ses men omfavner det hele-->
+
+
+    <script>
+        let urlParams = new URLSearchParams(window.location.search);
+        let id = urlParams.get("id");
+        let retter;
+
+
+        document.addEventListener("DOMContentLoaded", start);
+
+        function start() {
+            hentJson();
+
+        }
+
+
+
+
+
+        async function hentJson() {
+            let jsonData = await fetch("menu.json");
+            retter = await jsonData.json();
+            visRetter();
+        }
+
+
+
+        function visRetter() {
+            // globale variabeler
+            let dest = document.querySelector(".ret-display");
+
+
+            retter.forEach(ret => {
+
+                if (ret.id == id) {
+                    console.log(ret.kategori);
+
+
+
+
+                    //indsæt data i html
+                    dest.querySelector("h2").textContent = ret.navn;
+                    dest.querySelector(".ret-oprindelsesregion").textContent = ret.oprindelsesregion;
+                    dest.querySelector(".ret-billede").src = "assets/imgs/small/" + ret.billede + "-sm.jpg";
+                    ret.billede.jpg;
+                    dest.querySelector(".ret-billede").alt = "billede af" + ret.navn;
+                    dest.querySelector(".ret-langbeskrivelse").textContent = ret.langbeskrivelse;
+                    dest.querySelector(".ret-pris").textContent = ret.pris;
+
+
+
+
+                }
+            });
+        }
+
+    </script>
+
+
+
+</body>
+
+</html>

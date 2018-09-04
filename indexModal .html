@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Babushka Menu</title>
+    <title>Babushka Menu Modal view</title>
 
     <style>
         @import url('https://fonts.googleapis.com/css?family=ABeeZee|Anton|Quattrocento+Sans');
@@ -13,9 +13,13 @@
             background-color: darkorange;
         }
 
-        h1 {
+        header h1 {
             font-family: 'ABeeZee', sans-serif;
+            text-align: center;
+            font-size: 50px;
+            font-weight: bolder;
         }
+
 
         h2 {
             font-family: 'Anton', sans-serif;
@@ -25,12 +29,47 @@
             font-family: 'Quattrocento Sans', sans-serif;
         }
 
+        span {
+            font-family: 'Quattrocento Sans', sans-serif;
+        }
+
+        img {
+            height: 20vw;
+            width: auto;
+        }
+
+        nav button {
+            height: 40px;
+            width: 150px;
+            background-color: #ffa53a;
+            border: none;
+            margin-right: 5px;
+
+
+            font-family: 'ABeeZee', sans-serif;
+            text-align: center;
+            font-size: 20px;
+        }
+
+
+
+        @media screen and (max-width: 805px) {
+            nav button {
+                height: 20px;
+                width: 75px;
+                font-size: 12px;
+                margin-right: -9px;
+
+            }
+        }
+
         .ret-display {
             display: grid;
             border: 1px solid(3);
             padding: 10px;
             grid-gap: 10px;
         }
+
 
         @media screen and (min-width: 1229px) {
             .ret-display {
@@ -52,19 +91,82 @@
             }
 
         }
+
+        #modal {
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            background-color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 1s;
+            /*            display: none;*/
+        }
+
+        #modal-content {
+            width: 70vw;
+            height: 70vh;
+            background-color: #ffa53a;
+            margin: auto;
+        }
+
+        .modal-billede {
+            height: 30vh;
+            object-fit: scale-down;
+        }
+
+        #modal.vis {
+            opacity: 1;
+            pointer-events: all;
+            /*            display: block;*/
+        }
+
+        #modal h2 {
+            font-weight: bolder;
+        }
+
+        #modal p {
+            margin-top: -2vw;
+            margin-bottom: -1vw;
+        }
+
+        #modal button {
+            height: 20px;
+            width: 50px;
+            background-color: #ffa53a;
+            border: none;
+
+
+            font-family: 'ABeeZee', sans-serif;
+            text-align: center;
+            font-size: 10px;
+        }
     </style>
 </head>
 
 <body>
     <header>
+        <h1>Restaurant Babushka</h1>
         <h1>Menu</h1>
         <nav>
             <button class="menu-item" data-menu="forretter">Forretter</button>
             <button class="menu-item" data-menu="hovedretter">Hovedretter</button>
             <button class="menu-item" data-menu="desserter">Desserter</button>
             <button class="menu-item" data-menu="drikkevarer">Drikkevarer</button>
+            <button class="menu-item" data-menu="sideorders">Sides</button>
         </nav>
     </header>
+
+    <section id="modal">
+        <button>Close</button>
+        <div id="modal-content">
+            <h2 class="modal-navn"> </h2> <br>
+            <p class="modal-langbeskrivelse"></p> <br> Stammer oprindeligt fra <span class="modal-oprindelsesregion"></span> regionen. <br>
+            <span class="modal-pris"></span> DKK<br>
+            <img class="modal-billede" src="" alt="">
+        </div>
+    </section>
 
     <section class="ret-display"> </section>
 
@@ -80,7 +182,7 @@
          <h2 class="ret-navn"> </h2>
          <img class="ret-billede" src="" alt="">
          <p class="ret-kortbeskrivelse"> </p>
-         <p class="ret-pris"> </p>
+         <span class="ret-pris"></span> DKK
          <p class="ret-kategori"> </p>
 <!--
           <p class="ret-langbeskrivelse"> </p>
@@ -93,6 +195,7 @@
     </template>
 
     <script>
+        let modal = document.querySelector("#modal");
         let retter = [];
         let kategoriFilter = "alle";
 
@@ -146,6 +249,10 @@
                     klon.querySelector(".ret-billede").src = "assets/imgs/small/" + ret.billede + "-sm.jpg";
                     ret.billede.jpg;
 
+                    klon.querySelector(".ret-billede").addEventListener("click", () => {
+                        visModal(ret);
+                    });
+
                     klon.querySelector(".ret-billede").alt = "billede af" + ret.navn;
                     klon.querySelector(".ret-kortbeskrivelse").textContent = ret.kortbeskrivelse;
                     klon.querySelector(".ret-pris").textContent = ret.pris;
@@ -156,6 +263,26 @@
                     display.appendChild(klon);
                 }
             });
+        }
+
+        function visModal(retten) {
+
+            //ved klik på billedet vises modal vindu med indhold.
+            modal.classList.add("vis");
+            modal.querySelector(".modal-navn").textContent = retten.navn;
+            modal.querySelector(".modal-pris").textContent = retten.pris;
+            modal.querySelector(".modal-oprindelsesregion").textContent = retten.oprindelsesregion;
+            modal.querySelector(".modal-langbeskrivelse").textContent = retten.langbeskrivelse;
+            modal.querySelector(".modal-billede").src = "assets/imgs/small/" + retten.billede + "-sm.jpg";
+            modal.querySelector(".modal-billede").alt = "Foto af" + retten.navn;
+
+            //ved klik fjernes modal vindu med indholdet.
+            modal.querySelector("button").addEventListener("click", skjulModal);
+
+        }
+
+        function skjulModal() {
+            modal.classList.remove("vis");
         }
     </script>
 
