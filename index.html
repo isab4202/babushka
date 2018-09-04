@@ -5,7 +5,26 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Babushka Menu</title>
+
     <style>
+        @import url('https://fonts.googleapis.com/css?family=ABeeZee|Anton|Quattrocento+Sans');
+
+        html {
+            background-color: darkorange;
+        }
+
+        h1 {
+            font-family: 'ABeeZee', sans-serif;
+        }
+
+        h2 {
+            font-family: 'Anton', sans-serif;
+        }
+
+        p {
+            font-family: 'Quattrocento Sans', sans-serif;
+        }
+
         .ret-display {
             display: grid;
             border: 1px solid(3);
@@ -33,7 +52,6 @@
             }
 
         }
-
     </style>
 </head>
 
@@ -41,17 +59,16 @@
     <header>
         <h1>Menu</h1>
         <nav>
-            <button class="forretter">Forretter</button>
-            <button class="hovedretter">Hovedretter</button>
-            <button class="desserter">Desserter</button>
-            <button class="drikkevarer">Drikkevarer</button>
-            <button></button>
+            <button class="menu-item" data-menu="forretter">Forretter</button>
+            <button class="menu-item" data-menu="hovedretter">Hovedretter</button>
+            <button class="menu-item" data-menu="desserter">Desserter</button>
+            <button class="menu-item" data-menu="drikkevarer">Drikkevarer</button>
         </nav>
     </header>
 
-    <main class="ret-display">
+    <section class="ret-display"> </section>
 
-    </main>
+
 
     <footer>
         <p> Projekt af Isabella Funck Bilsteen</p>
@@ -64,7 +81,7 @@
          <img class="ret-billede" src="" alt="">
          <p class="ret-kortbeskrivelse"> </p>
          <p class="ret-pris"> </p>
-
+         <p class="ret-kategori"> </p>
 <!--
           <p class="ret-langbeskrivelse"> </p>
               <p class="ret-id"> </p>
@@ -76,13 +93,30 @@
     </template>
 
     <script>
-        //OBS camillias tag
         let retter = [];
+        let kategoriFilter = "alle";
+
+
         document.addEventListener("DOMContentLoaded", start);
 
         function start() {
             hentJson();
+            forberedFiltrering();
         }
+
+        function forberedFiltrering() {
+            document.querySelectorAll("nav button").forEach(knap => {
+                knap.addEventListener("click", () => {
+
+
+                    kategoriFilter = knap.getAttribute("data-menu");
+                    visRetter();
+                });
+            });
+
+        }
+
+
 
         async function hentJson() {
             let jsonData = await fetch("menu.json");
@@ -90,30 +124,39 @@
             visRetter();
         }
 
+
+
         function visRetter() {
+            // globale variabeler
             let display = document.querySelector(".ret-display");
             let temp = document.querySelector(".ret-template");
-            //løb personliste igennem og lav klon//
+
+            display.textContent = "";
 
             retter.forEach(ret => {
 
-                //lav en klon af template
-                let klon = temp.cloneNode(true).content;
-                //indsæt data i html
-                klon.querySelector("h2").textContent = ret.navn;
-                klon.querySelector(".ret-billede").src = "assets/imgs/small/" + ret.billede + "-sm.jpg"
-                ret.billede.jpg;
+                if (ret.kategori == kategoriFilter || kategoriFilter == "alle") {
+                    console.log(ret.kategori, kategoriFilter);
 
-                klon.querySelector(".ret-billede").alt = "billede af" + ret.navn;
-                klon.querySelector(".ret-kortbeskrivelse").textContent = ret.kortbeskrivelse;
-                klon.querySelector(".ret-pris").textContent = ret.pris;
+                    //lav en klon af template
+                    let klon = temp.cloneNode(true).content;
+
+                    //indsæt data i html
+                    klon.querySelector("h2").textContent = ret.navn;
+                    klon.querySelector(".ret-billede").src = "assets/imgs/small/" + ret.billede + "-sm.jpg";
+                    ret.billede.jpg;
+
+                    klon.querySelector(".ret-billede").alt = "billede af" + ret.navn;
+                    klon.querySelector(".ret-kortbeskrivelse").textContent = ret.kortbeskrivelse;
+                    klon.querySelector(".ret-pris").textContent = ret.pris;
 
 
-                //placer klon i html
-                display.appendChild(klon);
+
+                    //placer klon i html
+                    display.appendChild(klon);
+                }
             });
         }
-
     </script>
 
 
